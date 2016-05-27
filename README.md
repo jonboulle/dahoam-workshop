@@ -2,7 +2,7 @@
 
 We are going to turn on three CoreOS VMs under AWS. Then we will deploy a simple web application on top. Once configured we will do various fire drills of different failures of Kubernetes.
 
-This presentation was given at OSCON 2016 in Austin. There was a live tutorial given and the video is not yet available. However, there are [slides](https://speakerdeck.com/philips/real-world-kubernetes-deployments-at-oscon-2016).
+This presentation is a modification of one originally given at OSCON 2016 in Austin. There are [slides](https://speakerdeck.com/philips/real-world-kubernetes-deployments-at-oscon-2016) available from that presentation.
 
 ## Pre-Requisites
 
