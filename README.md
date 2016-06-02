@@ -2,11 +2,13 @@
 
 We are going to turn on three CoreOS VMs under AWS. Then we will deploy a simple web application on top. Once configured we will do various fire drills of different failures of Kubernetes.
 
-This presentation is a modification of one originally given at OSCON 2016 in Austin. There are [slides](https://speakerdeck.com/philips/real-world-kubernetes-deployments-at-oscon-2016) available from that presentation.
+This presentation is a modification of one originally given at OSCON 2016 in Austin.
+There are [slides](https://speakerdeck.com/philips/real-world-kubernetes-deployments-at-oscon-2016) available from that presentation.
 
 ## Pre-Requisites
 
-- An [AWS account](http://aws.amazon.com/) and [AWS cli](https://aws.amazon.com/cli/)
+- An [AWS account](http://aws.amazon.com/) and the [`aws` CLI tool](https://aws.amazon.com/cli/)
+  - The `aws` tool configured with EC2 permissions
   - An [AWS keypair for eu-central-1](https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:sort=keyName)
 - [kube-aws](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html) installed and in your path
 - [kubectl 1.2.4](https://coreos.com/kubernetes/docs/latest/configure-kubectl.html) installed and in your path
@@ -32,15 +34,16 @@ aws ec2 --region eu-central-1 describe-key-pairs
 **kube-aws**
 
 ```
-kube-aws --help
+kube-aws version
 kube-aws version v0.7.0
 ```
 
 **kubectl**
 
 ```
-$ kubectl version
-Client Version: version.Info{Major:"1", Minor:"2", GitVersion:"v1.2.3", GitCommit:"882d296a99218da8f6b2a340eb0e81c69e66ecc7", GitTreeState:"clean"}
+kubectl version
+Client Version: version.Info{Major:"1", Minor:"2", GitVersion:"v1.2.4", GitCommit:"3eed1e3be6848b877ff80a93da3785d9034d0a4f", GitTreeState:"clean"}
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
 ```
 
 ## Initial Cluster Setup
@@ -48,8 +51,8 @@ Client Version: version.Info{Major:"1", Minor:"2", GitVersion:"v1.2.3", GitCommi
 Clone this repo:
 
 ```
-git clone https://github.com/philips/2016-OSCON-containers-at-scale-with-Kubernetes
-cd 2016-OSCON-containers-at-scale-with-Kubernetes
+git clone https://github.com/jonboulle/dahoam-workshop
+cd dahoam-workshop
 ```
 
 Create a directory for cluster configuration and move into it before following the `kube-aws` setup below.
