@@ -15,7 +15,7 @@ This presentation is a modification of one originally given at OSCON 2016 in Aus
 
 **AWS CLI**
 
-Test that we have a keypair that works and is avaiable in our region:
+Test that we have a keypair that works and is available in our region:
 
 ```
 aws ec2 --region us-west-2 describe-key-pairs
