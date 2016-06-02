@@ -29,13 +29,13 @@ releaseChannel: beta
 keyName: philips
 
 # Region to provision Kubernetes cluster
-region: us-west-2
+region: eu-central-1
 
 # Availability Zone to provision Kubernetes cluster
-availabilityZone: us-west-2c
+availabilityZone: eu-central-1c
 
 # ARN of the KMS key used to encrypt TLS assets.
-kmsKeyArn: "arn:aws:kms:us-west-2:334544467761:key/61af0d8f-c27a-466f-a981-81c6ceca6032"
+kmsKeyArn: "arn:aws:kms:eu-central-1:334544467761:key/61af0d8f-c27a-466f-a981-81c6ceca6032"
 
 # Instance type for controller node
 #controllerInstanceType: m3.medium

@@ -7,7 +7,7 @@ This presentation is a modification of one originally given at OSCON 2016 in Aus
 ## Pre-Requisites
 
 - An [AWS account](http://aws.amazon.com/) and [AWS cli](https://aws.amazon.com/cli/)
-  - An [AWS keypair for us-west-2](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#KeyPairs:sort=keyName)
+  - An [AWS keypair for eu-central-1](https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:sort=keyName)
 - [kube-aws](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html) installed and in your path
 - [kubectl 1.2.4](https://coreos.com/kubernetes/docs/latest/configure-kubectl.html) installed and in your path
 
@@ -18,7 +18,7 @@ This presentation is a modification of one originally given at OSCON 2016 in Aus
 Test that we have a keypair that works and is available in our region:
 
 ```
-aws ec2 --region us-west-2 describe-key-pairs
+aws ec2 --region eu-central-1 describe-key-pairs
 {
     "KeyPairs": [
         {
@@ -143,14 +143,14 @@ This will create a ELB that we can hit. But, it will take a few moments for ever
 
 Now that we have a sense of how everything works try to go to the ELB console page and take a look at the health checks:
 
-https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#LoadBalancers:
+https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#LoadBalancers:
 
 Now that everything is up and running hit the ELB URL in your browser.
 
 
 ```
 aws elb describe-load-balancers | jq '"http://" + .LoadBalancerDescriptions[].DNSName' -r
-http://a8eedeefe1b4d11e685410a4b212ca4d-2012685803.us-west-2.elb.amazonaws.com
+http://a8eedeefe1b4d11e685410a4b212ca4d-2012685803.eu-central-1.elb.amazonaws.com
 ```
 
 # Understand the Network
@@ -242,19 +242,19 @@ The API server is the service running on cluster that the kubectl tool, and othe
 kubectl get pods --namespace=kube-system
 NAME                                                              READY     STATUS    RESTARTS   AGE
 heapster-v1.0.2-808903792-p6eej                                   2/2       Running   0          1d
-kube-apiserver-ip-10-0-0-50.us-west-2.compute.internal            1/1       Running   0          2m
-kube-controller-manager-ip-10-0-0-50.us-west-2.compute.internal   1/1       Running   1          1d
+kube-apiserver-ip-10-0-0-50.eu-central-1.compute.internal            1/1       Running   0          2m
+kube-controller-manager-ip-10-0-0-50.eu-central-1.compute.internal   1/1       Running   1          1d
 kube-dns-v11-fhouu                                                4/4       Running   0          1d
-kube-proxy-ip-10-0-0-227.us-west-2.compute.internal               1/1       Running   0          1d
-kube-proxy-ip-10-0-0-228.us-west-2.compute.internal               1/1       Running   1          1d
-kube-proxy-ip-10-0-0-50.us-west-2.compute.internal                1/1       Running   0          1d
-kube-scheduler-ip-10-0-0-50.us-west-2.compute.internal            1/1       Running   2          1d
+kube-proxy-ip-10-0-0-227.eu-central-1.compute.internal               1/1       Running   0          1d
+kube-proxy-ip-10-0-0-228.eu-central-1.compute.internal               1/1       Running   1          1d
+kube-proxy-ip-10-0-0-50.eu-central-1.compute.internal                1/1       Running   0          1d
+kube-scheduler-ip-10-0-0-50.eu-central-1.compute.internal            1/1       Running   2          1d
 ```
 
 Describe the pod and to find that the command that runs the API server is `hyperkube apiserver`.
 
 ```
-kubectl describe pods --namespace=kube-system kube-apiserver-ip-10-0-0-50.us-west-2.compute.internal
+kubectl describe pods --namespace=kube-system kube-apiserver-ip-10-0-0-50.eu-central-1.compute.internal
 ```
 
 Next, ssh into the control machine, find the PID of the API server, and kill it.
@@ -423,7 +423,7 @@ Scaling the cluster up is pretty easy using AWS Auto Scaling Groups. Find the na
 
 ```
 aws autoscaling describe-auto-scaling-groups  | jq .AutoScalingGroups[].AutoScalingGroupARN -c -r
-arn:aws:autoscaling:us-west-2:334544467761:autoScalingGroup:04f1009d-2ae8-4265-8e99-72395229a7b9:autoScalingGroupName/mycluster-AutoScaleWorker-RDWPOE65KS2M
+arn:aws:autoscaling:eu-central-1:334544467761:autoScalingGroup:04f1009d-2ae8-4265-8e99-72395229a7b9:autoScalingGroupName/mycluster-AutoScaleWorker-RDWPOE65KS2M
 ```
 
 Then use that name to scale the cluster up to 3 machines:
@@ -463,16 +463,16 @@ The cluster will have three members
 ```
 $ kubectl get nodes
 NAME                                       STATUS                     AGE
-ip-10-0-0-227.us-west-2.compute.internal   Ready                      1d
-ip-10-0-0-228.us-west-2.compute.internal   Ready                      1d
-ip-10-0-0-50.us-west-2.compute.internal    Ready,SchedulingDisabled   1d
+ip-10-0-0-227.eu-central-1.compute.internal   Ready                      1d
+ip-10-0-0-228.eu-central-1.compute.internal   Ready                      1d
+ip-10-0-0-50.eu-central-1.compute.internal    Ready,SchedulingDisabled   1d
 ```
 
 Choose one of the machines and tell Kubernetes to drain work off of it:
 
 ```
-$ kubectl drain ip-10-0-0-228.us-west-2.compute.internal --force
-node "ip-10-0-0-228.us-west-2.compute.internal" cordoned
+$ kubectl drain ip-10-0-0-228.eu-central-1.compute.internal --force
+node "ip-10-0-0-228.eu-central-1.compute.internal" cordoned
 ```
 
 After draining the node should get no additional work as it will be labeled "SchedulingDisabled":
@@ -480,14 +480,14 @@ After draining the node should get no additional work as it will be labeled "Sch
 ```
 $ kubectl get nodes
 NAME                                       STATUS                     AGE
-ip-10-0-0-228.us-west-2.compute.internal   Ready,SchedulingDisabled   1d
+ip-10-0-0-228.eu-central-1.compute.internal   Ready,SchedulingDisabled   1d
 ```
 
 Lets uncordon the machine and get it back into the load balancer:
 
 ```
-$ kubectl uncordon ip-10-0-0-228.us-west-2.compute.internal
-node "ip-10-0-0-228.us-west-2.compute.internal" uncordoned
+$ kubectl uncordon ip-10-0-0-228.eu-central-1.compute.internal
+node "ip-10-0-0-228.eu-central-1.compute.internal" uncordoned
 ```
 
 During this exercise we will see that the machine went from Healthy to Unhealthy to back in our application ELB:
@@ -501,13 +501,13 @@ Choose a worker machine at random to be part of this test:
 ```
 kubectl get nodes
 NAME                                       STATUS                     AGE
-ip-10-0-0-231.us-west-2.compute.internal   Ready                      1d
+ip-10-0-0-231.eu-central-1.compute.internal   Ready                      1d
 ```
 
 Find the public IP of the random worker machine.
 
 ```
-kubectl describe node ip-10-0-0-231.us-west-2.compute.internal  | grep Addresses
+kubectl describe node ip-10-0-0-231.eu-central-1.compute.internal  | grep Addresses
 Addresses:      10.0.0.231,10.0.0.231,52.39.160.184
 ```
 
@@ -520,7 +520,7 @@ ssh 52.39.160.184 -l core sudo systemctl stop kubelet
 ```
 kubectl events -w
 FIRSTSEEN                       LASTSEEN                        COUNT     NAME                                       KIND      SUBOBJECT   TYPE      REASON         SOURCE                 MESSAGE
-2016-05-16 06:07:56 -0500 CDT   2016-05-16 06:07:56 -0500 CDT   1         ip-10-0-0-231.us-west-2.compute.internal   Node                  Normal    NodeNotReady   {controllermanager }   Node ip-10-0-0-231.us-west-2.compute.internal status is now: NodeNotReady
+2016-05-16 06:07:56 -0500 CDT   2016-05-16 06:07:56 -0500 CDT   1         ip-10-0-0-231.eu-central-1.compute.internal   Node                  Normal    NodeNotReady   {controllermanager }   Node ip-10-0-0-231.eu-central-1.compute.internal status is now: NodeNotReady
 2016-05-16 05:54:14 -0500 CDT   2016-05-16 06:08:04 -0500 CDT   5         guestbook   Service             Normal    UpdatedLoadBalancer   {service-controller }   Updated load balancer with new hosts
 ```
 
@@ -528,11 +528,11 @@ This happens after about 1 minute. Then we need to wait 5 minutes more for the C
 
 ```
 kubectl get events
-2m          2m         1         ip-10-0-0-231.us-west-2.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.us-west-2.compute.internal event: Pod guestbook-63bjl has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.us-west-2.compute.internal" and is being force killed
-2m          2m         1         ip-10-0-0-231.us-west-2.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.us-west-2.compute.internal event: Pod kube-prometheus-ld49x has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.us-west-2.compute.internal" and is being force killed
-2m          2m         1         ip-10-0-0-231.us-west-2.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.us-west-2.compute.internal event: Pod redis-master-kq5n1 has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.us-west-2.compute.internal" and is being force killed
-2m          2m         1         ip-10-0-0-231.us-west-2.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.us-west-2.compute.internal event: Pod kube-proxy-ip-10-0-0-231.us-west-2.compute.internal has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.us-west-2.compute.internal" and is being force killed
-2m          2m         1         ip-10-0-0-231.us-west-2.compute.internal   Node
+2m          2m         1         ip-10-0-0-231.eu-central-1.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.eu-central-1.compute.internal event: Pod guestbook-63bjl has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.eu-central-1.compute.internal" and is being force killed
+2m          2m         1         ip-10-0-0-231.eu-central-1.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.eu-central-1.compute.internal event: Pod kube-prometheus-ld49x has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.eu-central-1.compute.internal" and is being force killed
+2m          2m         1         ip-10-0-0-231.eu-central-1.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.eu-central-1.compute.internal event: Pod redis-master-kq5n1 has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.eu-central-1.compute.internal" and is being force killed
+2m          2m         1         ip-10-0-0-231.eu-central-1.compute.internal   Node                                                       Normal    TerminatingEvictedPod    {controllermanager }                                    Node ip-10-0-0-231.eu-central-1.compute.internal event: Pod kube-proxy-ip-10-0-0-231.eu-central-1.compute.internal has exceeded the grace period for deletion after being evicted from Node "ip-10-0-0-231.eu-central-1.compute.internal" and is being force killed
+2m          2m         1         ip-10-0-0-231.eu-central-1.compute.internal   Node
 ```
 
 
@@ -545,7 +545,7 @@ ssh 52.39.160.184 -l core sudo systemctl restart kubelet
 And the machine will re-enter the cluster:
 
 ```
-kubectl describe  node ip-10-0-0-227.us-west-2.compute.internal
+kubectl describe  node ip-10-0-0-227.eu-central-1.compute.internal
 ```
 
 ## Downgrade/Upgrade the Kubelet
@@ -555,13 +555,13 @@ Choose a worker machine at random to be part of this test:
 ```
 kubectl get nodes
 NAME                                       STATUS                     AGE
-ip-10-0-0-227.us-west-2.compute.internal   Ready                      1d
+ip-10-0-0-227.eu-central-1.compute.internal   Ready                      1d
 ```
 
 Find the public IP of the random worker machine.
 
 ```
-kubectl describe node ip-10-0-0-227.us-west-2.compute.internal  | grep Addresses
+kubectl describe node ip-10-0-0-227.eu-central-1.compute.internal  | grep Addresses
 Addresses:      10.0.0.227,10.0.0.227,52.39.138.102
 ```
 
@@ -577,7 +577,7 @@ sudo journalctl -u kubelet -f
 Confirm that the kubelet reports the new version:
 
 ```
-kubectl describe node ip-10-0-0-227.us-west-2.compute.internal | grep "Kubelet Version"
+kubectl describe node ip-10-0-0-227.eu-central-1.compute.internal | grep "Kubelet Version"
 ```
 
 Once a single machine is tested consider updating the autoscaling group.
