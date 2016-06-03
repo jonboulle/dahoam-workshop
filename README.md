@@ -253,7 +253,7 @@ $ kubectl get pods -l dahoam=cool
 
 ## Simulate an API server failure
 
-The API server is the service running on cluster that the kubectl tool, and other clients, interacts with. It runs in the kube-system namespace, so lets get information on this service.
+The API server is the service running on cluster that the kubectl tool, and other clients, interacts with. It runs in the kube-system namespace, so let's get information on this service.
 
 ```
 kubectl get pods --namespace=kube-system
@@ -312,7 +312,7 @@ mv /etc/kubernetes/manifests/kube-scheduler.yaml /tmp
 
 **Note**: in the near future of [self-hosted Kubernetes](https://www.youtube.com/watch?v=A49xXiKZNTQ&t=360s) you will be able to do this using kubectl!
 
-Now, lets try and scale our application from 3 processes to 5. 
+Now, let's try and scale our application from 3 processes to 5. 
 
 ```
 kubectl scale rc guestbook --replicas=5
@@ -373,7 +373,7 @@ mv /etc/kubernetes/manifests/kube-controller-manager.yaml /tmp
 
 **Note**: in the near future of [self-hosted Kubernetes](https://www.youtube.com/watch?v=A49xXiKZNTQ&t=360s) you will be able to do this using kubectl!
 
-Now, lets try and scale our application from 5 pods to 3.
+Now, let's try and scale our application from 5 pods to 3.
 
 ```
 kubectl scale rc guestbook --replicas=3
