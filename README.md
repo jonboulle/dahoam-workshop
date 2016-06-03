@@ -537,7 +537,7 @@ ssh 52.39.160.184 -l core sudo systemctl stop kubelet
 ```
 
 ```
-kubectl events -w
+kubectl get events -w
 FIRSTSEEN                       LASTSEEN                        COUNT     NAME                                       KIND      SUBOBJECT   TYPE      REASON         SOURCE                 MESSAGE
 2016-05-16 06:07:56 -0500 CDT   2016-05-16 06:07:56 -0500 CDT   1         ip-10-0-0-231.eu-central-1.compute.internal   Node                  Normal    NodeNotReady   {controllermanager }   Node ip-10-0-0-231.eu-central-1.compute.internal status is now: NodeNotReady
 2016-05-16 05:54:14 -0500 CDT   2016-05-16 06:08:04 -0500 CDT   5         guestbook   Service             Normal    UpdatedLoadBalancer   {service-controller }   Updated load balancer with new hosts
