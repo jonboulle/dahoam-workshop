@@ -12,7 +12,7 @@ Please ensure you have the following set up on your laptop before you come to th
   - The [`aws` CLI tool](https://aws.amazon.com/cli/) isntalled and in your path
   - An [AWS keypair for eu-central-1](https://eu-central-1.console.aws.amazon.com/ec2/v2/home?region=eu-central-1#KeyPairs:sort=keyName)
 - [kube-aws](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html) installed and in your path
-- [kubectl 1.2.4](https://coreos.com/kubernetes/docs/latest/configure-kubectl.html) installed and in your path
+- [kubectl 1.2.4](https://coreos.com/kubernetes/docs/latest/configure-kubectl.html) installed and in your path (note this references 1.2.3, so you'll need to tweak the link)
 
 ## Testing Prerequisites
 
