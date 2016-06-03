@@ -372,7 +372,7 @@ Temporarily disable the controller manager by removing it from the controller ma
 
 ```
 ssh core@mycluster.example.com
-mv /etc/kubernetes/manifests/kube-controller-manager.yaml /tmp
+sudo mv /etc/kubernetes/manifests/kube-controller-manager.yaml /tmp
 ```
 
 **Note**: in the near future of [self-hosted Kubernetes](https://www.youtube.com/watch?v=A49xXiKZNTQ&t=360s) you will be able to do this using kubectl!
@@ -425,7 +425,7 @@ Moving the controller manager back into place will resolve the issue:
 
 ```
 ssh core@mycluster.example.com
-mv /tmp/kube-controller-manager.yaml /etc/kubernetes/manifests/
+sudo mv /tmp/kube-controller-manager.yaml /etc/kubernetes/manifests/
 ```
 
 And there the manager goes, the new pods are created and now running:
