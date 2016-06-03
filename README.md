@@ -214,7 +214,9 @@ But note that even with etcd down DNS will continue to be served:
 dig +vc -p 5300 @127.0.0.1  redis-master.default.svc.cluster.local
 ```
 
-Bring etcd back up and kubectl get pods work again:
+And if you go to the app in your browser it should continue to serve just fine.
+
+Bring etcd back up and `kubectl` should work again:
 ```
 sudo systemctl start etcd2
 ```
@@ -301,7 +303,7 @@ Furthermore! The service we are running should remain fully available.
 
 ## Simulate Failure of Scheduler
 
-The scheduler's job is to land work on to machines that can run them. When it fails new work doesn't land. Lets simulate a bug in the scheduler and see what happens.
+The scheduler's job is to land work on to machines that can run them. When it fails new work doesn't land. Let's simulate a bug in the scheduler and see what happens.
 
 Temporarily disable the scheduler by removing it from the controller manifests:
 
@@ -319,7 +321,7 @@ kubectl scale rc guestbook --replicas=5
 replicationcontroller "guestbook" scaled
 ```
 
-Looks like it worked great! Lets check it out!
+Looks like it worked great! Let's check it out!
 
 ```
 kubectl get rc
@@ -380,12 +382,12 @@ kubectl scale rc guestbook --replicas=3
 replicationcontroller "guestbook" scaled
 ```
 
-Looks like it worked great! Lets check it out!
+Looks like it worked great! Let's check it out!
 
 ```
 kubectl get rc
 NAME              DESIRED   CURRENT   AGE
-guestbook         5         5         4h
+guestbook         3         5         4h
 ```
 
 Unfortunately, none of the old processes are stopping! What is going on?
@@ -408,7 +410,7 @@ kubectl delete pod guestbook-ajqqo
 kubectl delete pod guestbook-u6h2o
 ```
 
-Oops, this deleted too many pods in fact. Now the cluster has even fewer running pods than desired. This is a potential danger of having the controller manager down. Lets recover the controller manager to get this going again!
+Oops, this deleted too many pods in fact. Now the cluster has even fewer running pods than desired. This is a potential danger of having the controller manager down. Let's recover the controller manager to get this going again!
 
 ```
 kubectl get pods -l app=guestbook
@@ -451,7 +453,7 @@ aws autoscaling update-auto-scaling-group --auto-scaling-group-name myluster-Aut
 
 After a few minutes this machine will appear in the node list. But, how does this magic happen?!
 
-To bootstrap into the cluster a machine only needs a little bit of metadata. This metadata is passed in via AWS userdata. Lets take a look!
+To bootstrap into the cluster a machine only needs a little bit of metadata. This metadata is passed in via AWS userdata. Let's take a look!
 
 First, find out the LaunchConfigurationWorker name:
 
@@ -460,7 +462,7 @@ aws autoscaling describe-auto-scaling-groups  | jq .AutoScalingGroups[].LaunchCo
 ok-cluster-LaunchConfigurationWorker-7N3BDQZ1UZ2
 ```
 
-Then dump out the base64 endcoded User Data:
+Then dump out the base64-encoded User Data:
 
 ```
 aws autoscaling describe-launch-configurations --launch-configuration-names ok-cluster-LaunchConfigurationWorker-7N3BDQZ1UZ2 | jq .LaunchConfigurations[].UserData -r  | base64 -D | gzip -d
@@ -500,7 +502,7 @@ NAME                                       STATUS                     AGE
 ip-10-0-0-228.eu-central-1.compute.internal   Ready,SchedulingDisabled   1d
 ```
 
-Lets uncordon the machine and get it back into the load balancer:
+Let's uncordon the machine and get it back into the load balancer:
 
 ```
 $ kubectl uncordon ip-10-0-0-228.eu-central-1.compute.internal
