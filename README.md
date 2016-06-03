@@ -67,6 +67,8 @@ cd mycluster
 
 Follow the [Kubernetes + CoreOS + AWS docs](https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html). At the `kube-aws init` step use "mycluster.example.com" as the `external-dns-name` unless you have a registered domain you wish to use for this cluster, and use "mycluster" as the `cluster-name`. The rest of the tutorial will depend on these two values.
 
+**If you have a profile other than the default profile you have to set an environment variable to make the script use the right profile.** `export AWS_DEFAULT_PROFILE=myawsprofile`
+
 The final step of the AWS instructions, `kube-aws up`, will take some time. While it is building out that infrastructure we can cover the TLS setup.
 
 ### Understanding the Credential Setup
