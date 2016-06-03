@@ -242,7 +242,7 @@ At this point the etcd data on disk has diverged from the state in the current e
 sudo systemctl stop etcd2
 sudo rm -Rf /var/lib/etcd2
 sudo cp -Ra etcd2-backup/ /var/lib/etcd2
-sudo reboot
+sudo systemctl start etcd2
 ```
 
 The cluster reconciled to the previous state at the time the backup was taken. Again, without application downtime.
