@@ -180,7 +180,7 @@ Remember that for SSH to work you'll need to use the key-pair for this region.
 Either modify your SSH client config (e.g. `~/.ssh/config`), or for now we can use a temporary alias:
 
 ```
-alias ssh='ssh -o IdentifyFile=/path/to/key.pem'
+alias ssh='ssh -o IdentityFile=/path/to/key.pem'
 ```
 
 # Fire Drills
@@ -193,41 +193,45 @@ Log in to our control machine and stop etcd.
 
 ```
 ssh core@mycluster.example.com
-systemctl stop etcd2.service
+sudo systemctl stop etcd2.service
 ```
 
 Let's take a backup of the etcd data directory now. We will use this to simulate replacing etcd from backup in a moment.
 
 ```
-cp -Ra /var/lib/etcd2 etcd2-backup
+sudo cp -Ra /var/lib/etcd2 etcd2-backup
 ```
 
+Now back on our workstation:
 ```
 kubectl get pods
 Error from server: client: etcd cluster is unavailable or misconfigured
 ```
 
-And even with etcd down DNS will continue to be served.
+But note that even with etcd down DNS will continue to be served:
 
 ```
 dig +vc -p 5300 @127.0.0.1  redis-master.default.svc.cluster.local
 ```
 
 Bring etcd back up and kubectl get pods work again:
+```
+sudo systemctl start etcd2
+```
 
 ```
-kubectl get pods 
+kubectl get pods
 ```
 
-If cluster state is edit, say by adding a label to a replication controller, then killing a pod:
+If cluster state is edited, say by adding a label to a replication controller, then killing a pod:
 
 ```
 $ kubectl edit rc guestbook
 replicationcontroller "guestbook" edited
-$ kubectl get pods -l oscon=fun
+$ kubectl get pods -l dahoam=cool
 $ kubectl delete pod guestbook-63bjl
 pod "guestbook-63bjl" deleted
-$ kubectl get pods -l oscon=fun
+$ kubectl get pods -l dahoam=cool
 NAME              READY     STATUS    RESTARTS   AGE
 guestbook-o95oz   1/1       Running   0          5s
 ```
@@ -235,16 +239,16 @@ guestbook-o95oz   1/1       Running   0          5s
 At this point the etcd data on disk has diverged from the state in the current etcd. What will happen to the app?
 
 ```
-systemctl stop etcd2
-rm -Rf /var/lib/etcd2
-cp -Ra etcd2-backup/ /var/lib/etcd2
-reboot
+sudo systemctl stop etcd2
+sudo rm -Rf /var/lib/etcd2
+sudo cp -Ra etcd2-backup/ /var/lib/etcd2
+sudo reboot
 ```
 
 The cluster reconciled to the previous state at the time the backup was taken. Again, without application downtime.
 
 ```
-$ kubectl get pods -l oscon=fun
+$ kubectl get pods -l dahoam=cool
 ```
 
 ## Simulate an API server failure
