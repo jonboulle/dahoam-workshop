@@ -170,7 +170,7 @@ Try and grab the redis-master service powering our website:
 ```
 dig +vc -p 5300 @127.0.0.1  redis-master.default.svc.cluster.local
 redis-master.default.svc.cluster.local. 30 IN A 10.3.0.25
-``
+```
 
 For more [network debugging tips see this page](https://github.com/coreos/docs/blob/master/kubernetes/network-troubleshooting.md).
 
