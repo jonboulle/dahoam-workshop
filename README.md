@@ -170,9 +170,18 @@ Try and grab the redis-master service powering our website:
 ```
 dig +vc -p 5300 @127.0.0.1  redis-master.default.svc.cluster.local
 redis-master.default.svc.cluster.local. 30 IN A 10.3.0.25
-```
+``
 
 For more [network debugging tips see this page](https://github.com/coreos/docs/blob/master/kubernetes/network-troubleshooting.md).
+
+# Test SSH connection to the cluster
+
+Remember that for SSH to work you'll need to use the key-pair for this region.
+Either modify your SSH client config (e.g. `~/.ssh/config`), or for now we can use a temporary alias:
+
+```
+alias ssh='ssh -o IdentifyFile=/path/to/key.pem'
+```
 
 # Fire Drills
 
@@ -180,14 +189,14 @@ We are going to run through a series of firedrills now:
 
 ## Recover etcd from Backup
 
-Login to our control machine and stop etcd.
+Log in to our control machine and stop etcd.
 
 ```
 ssh core@mycluster.example.com
 systemctl stop etcd2.service
 ```
 
-Lets take a backup of the etcd data directory now. We will use this to simulate replacing etcd from backup in a moment.
+Let's take a backup of the etcd data directory now. We will use this to simulate replacing etcd from backup in a moment.
 
 ```
 cp -Ra /var/lib/etcd2 etcd2-backup
