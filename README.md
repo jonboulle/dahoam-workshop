@@ -311,7 +311,7 @@ Temporarily disable the scheduler by removing it from the controller manifests:
 
 ```
 ssh core@mycluster.example.com
-mv /etc/kubernetes/manifests/kube-scheduler.yaml /tmp
+sudo mv /etc/kubernetes/manifests/kube-scheduler.yaml /tmp
 ```
 
 **Note**: in the near future of [self-hosted Kubernetes](https://www.youtube.com/watch?v=A49xXiKZNTQ&t=360s) you will be able to do this using kubectl!
@@ -349,7 +349,7 @@ Moving the scheduler back into place will resolve the issue:
 
 ```
 ssh core@mycluster.example.com
-mv /tmp/kube-scheduler.yaml /etc/kubernetes/manifests/
+sudo mv /tmp/kube-scheduler.yaml /etc/kubernetes/manifests/
 ```
 
 And there the scheduler goes, the processes are now running:
